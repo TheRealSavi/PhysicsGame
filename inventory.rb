@@ -4,7 +4,7 @@ class Inventory
     @z = 1000
     @size = 315
     @x = Window.width / 2 - @size / 2
-    @y = Window.height / 2 - @size /2
+    @y = Window.height / 2 - @size / 2
     @ui = Square.new(x: @x, y: @y, z: @z, size: @size, color: 'white')
     @ui.remove
     @shown = false
