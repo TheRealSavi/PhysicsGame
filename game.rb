@@ -1,4 +1,4 @@
-require 'savio'
+require 'ruby2d'
 set width: 1400, height: 1000, resizable:true #window properties
 
 require_relative 'inventory.rb'
