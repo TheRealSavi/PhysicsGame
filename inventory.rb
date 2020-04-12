@@ -5,7 +5,7 @@ class Inventory
     @size = 315
     @x = Window.width / 2 - @size / 2
     @y = Window.height / 2 - @size / 2
-    @ui = Square.new(x: @x, y: @y, z: @z, size: @size, color: 'white')
+    @ui = Image.new('inventory.jpg', x: @x, y: @y, z: @z, size: @size)
     @ui.remove
     @shown = false
 
@@ -33,17 +33,14 @@ class Inventory
     @items.each_with_index do |item, i|
       lengthOfItemsInLayer = 0
       itemsInLayer = 0
-      @displayItems.last(@displayItems.count % 5).each do |j|
-        itemsInLayer += 1
-        lengthOfItemsInLayer += j.width
-      end
+
+      itemsInLayer = @displayItems.count % 5
       if @displayItems.count % 5 == 0
         layer +=1
         itemsInLayer = 0
-        lengthOfItemsInLayer = 0
       end
-      @displayItems.push(Text.new(item.name, x: @x + 15 + lengthOfItemsInLayer + (15 * itemsInLayer), y: @y + 30 + (50 * (layer - 1)), z: @z +1, color: 'black'))
-      @displayIcons.push(Square.new(x: @x + 15 + lengthOfItemsInLayer + (15 * (itemsInLayer - 1)) + (@displayItems[i].width / 2), y: @y + 15 + (50 * (layer - 1)), z: @z + 2, size: item.model.size, color: item.model.color))
+      @displayItems.push(Text.new(item.name, x: @x + 15 + (63 * itemsInLayer), y: @y + 30 + ( 63 * (layer - 1)), z: @z +1, color: 'black'))
+      @displayIcons.push(Square.new(x: @x + 15 + (63 * itemsInLayer) + (@displayItems[i].width / 2), y: @y + 15 + (63 * (layer - 1)), z: @z + 2, size: item.model.size, color: item.model.color))
     end
   end
 
