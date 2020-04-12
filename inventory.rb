@@ -1,5 +1,5 @@
 class Inventory
-  attr_reader :items
+  attr_reader :items, :slots
   def initialize()
     @z = 1000
     @size = 315
@@ -8,6 +8,8 @@ class Inventory
     @ui = Square.new(x: @x, y: @y, z: @z, size: @size, color: 'white')
     @ui.remove
     @shown = false
+
+    @slots = 15
 
     @items = []
     @displayItems = []
@@ -27,13 +29,21 @@ class Inventory
     @ui.add
     @displayItems.clear
 
+    layer = 0
     @items.each_with_index do |item, i|
-      lengthOfItems = 0
-      @displayItems.each do |j|
-        lengthOfItems += j.width
+      lengthOfItemsInLayer = 0
+      itemsInLayer = 0
+      @displayItems.last(@displayItems.count % 5).each do |j|
+        itemsInLayer += 1
+        lengthOfItemsInLayer += j.width
       end
-      @displayItems.push(Text.new(item.name, x: @x + 15 + lengthOfItems + (15 * @displayItems.count), y: @y + 30, z: @z +1, color: 'black'))
-      @displayIcons.push(Square.new(x: @x + 15 + lengthOfItems + (15 * (@displayItems.count - 1)) + (@displayItems[i].width / 2), y: @y + 15, z: @z + 2, size: item.model.size, color: item.model.color))
+      if @displayItems.count % 5 == 0
+        layer +=1
+        itemsInLayer = 0
+        lengthOfItemsInLayer = 0
+      end
+      @displayItems.push(Text.new(item.name, x: @x + 15 + lengthOfItemsInLayer + (15 * itemsInLayer), y: @y + 30 + (50 * (layer - 1)), z: @z +1, color: 'black'))
+      @displayIcons.push(Square.new(x: @x + 15 + lengthOfItemsInLayer + (15 * (itemsInLayer - 1)) + (@displayItems[i].width / 2), y: @y + 15 + (50 * (layer - 1)), z: @z + 2, size: item.model.size, color: item.model.color))
     end
   end
 
