@@ -2,7 +2,7 @@ require 'savio'
 set width: 1400, height: 1000, resizable:true #window properties
 
 require_relative 'Controller.rb'
-require_relative 'Environment.rb'
+require_relative 'Environments.rb'
 require_relative 'Materials.rb'
 
 require_relative 'KinematicBody.rb'

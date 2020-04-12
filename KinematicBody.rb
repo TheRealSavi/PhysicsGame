@@ -17,6 +17,7 @@ class KinematicBody
     end
 
     @material = material
+    @environment = Environments::AIR
 
     @color = color #color of the square
 
@@ -44,19 +45,19 @@ class KinematicBody
   end
 
   def gravity() #calculates and returns the force of gravity on the player
-    g = Environment::Gravity     #gravity constant
+    g = @environment.gravity     #gravity constant
     forceDown = @material.mass * g
     return Vector[0, forceDown]
   end
 
   def friction() #calculates and returns the force of friction on the player
-    coef = Environment::GroundFriction
+    coef = @environment.groundFriction
 
     v = Vector[@velocity[0], 0] #velocity vector with no y component
     u = Vector[(v[0] / (v.r + 0.01)), (v[1] / (v.r + 0.01))] #velocity vector with no magnitude, only direction
     u *= -1 #reverse direction so it opposes
     u *= coef #multiply by the coefficent of friction to get the magnitude
-    u *= @material.mass * Environment::Gravity #multiply by the Normal force to increase the magnitude.
+    u *= @material.mass * @environment.gravity #multiply by the Normal force to increase the magnitude.
 
     if u[0] > 0.0 && u[0] < 0.05 || u[0] < 0.0 && u[0] > -0.05 #get rid of the friction component if its really small
       u[0] = 0
@@ -66,9 +67,9 @@ class KinematicBody
   end
 
   def drag()
-    density = Environment::AirDensity
+    density = @environment.airDensity
     surfaceArea = @material.surfaceArea
-    coef = Environment::CoefficentOfDrag
+    coef = @environment.coefficentOfDrag
 
     velocity = Vector[@velocity[0], @velocity[1]]
 
@@ -104,25 +105,25 @@ class KinematicBody
     end
     applyForce(drag())
 
-    @velocity += @acceleration * Environment::TimeStep #calculates additional velocity with this frames determined acceleration vector
+    @velocity += @acceleration * @environment.timeStep #calculates additional velocity with this frames determined acceleration vector
 
     #these make sure the velocity is within range of max speed
     @velocity[0] = @velocity[0].clamp(-@material.maxSpeed, @material.maxSpeed)
     @velocity[1] = @velocity[1].clamp(-@material.maxSpeed, @material.maxSpeed)
 
-    if @velocity[0] > 0.0 && @velocity[0] < Environment::TimeStep || @velocity[0] < 0.0 && @velocity[0] > -Environment::TimeStep
+    if @velocity[0] > 0.0 && @velocity[0] < @environment.timeStep || @velocity[0] < 0.0 && @velocity[0] > -@environment.timeStep
       @velocity[0] = 0
     end
 
     #calculates addition to the potition based on the final velocity
-    @position += @velocity * Environment::TimeStep
+    @position += @velocity * @environment.timeStep
 
     if @position[1] >= (Window.height - 50) - @model.size
       @touchingGround = true
       @position[1] = (Window.height - 50) - @model.size
       @velocity[1] *= -1 * @material.bounciness
 
-      if @velocity[1] > 0.0 && @velocity[1] < Environment::TimeStep || @velocity[1] < 0.0 && @velocity[1] > -Environment::TimeStep
+      if @velocity[1] > 0.0 && @velocity[1] < @environment.timeStep || @velocity[1] < 0.0 && @velocity[1] > -@environment.timeStep
         @velocity[1] = 0
       end
       if @velocity == Vector[0,0]
