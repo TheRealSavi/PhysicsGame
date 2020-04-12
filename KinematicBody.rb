@@ -1,7 +1,7 @@
 require "matrix" #this is the builtin ruby library for vectors
 class KinematicBody
   attr_reader :touchingGround
-  attr_accessor :mass, :model
+  attr_accessor :mass, :model, :position
   def initialize(x,y,color,x2, material)
     #these are the pretty labels
     if x2 != false
