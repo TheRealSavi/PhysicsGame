@@ -20,10 +20,6 @@ class Item < KinematicBody
           @model.opacity -= 0.05
         else
           touchedByPlayer(p)
-          @model.opacity = 1.0
-          @model.size = @material.size
-          @model.remove
-          $items.delete(self)
         end
       else
         if @model.opacity < 1.0
@@ -49,7 +45,13 @@ class Item < KinematicBody
   end
 
   def touchedByPlayer(p)
-    p.inventory.addItem(self)
+    if p.inventory.items.count < p.inventory.slots
+      p.inventory.addItem(self)
+      @model.opacity = 1.0
+      @model.size = @material.size
+      @model.remove
+      $items.delete(self)
+    end
   end
 
 end
