@@ -115,13 +115,11 @@ class KinematicBody
     end
 
     #calculates addition to the potition based on the final velocity
-    prevPosition = Vector[@position[0],@position[1]]
-
     @position += @velocity * Environment::TimeStep
 
-    if @position[1] >= (Window.height - 50) - @material.size
+    if @position[1] >= (Window.height - 50) - @model.size
       @touchingGround = true
-      @position[1] = (Window.height - 50) - @material.size
+      @position[1] = (Window.height - 50) - @model.size
       @velocity[1] *= -1 * @material.bounciness
 
       if @velocity[1] > 0.0 && @velocity[1] < Environment::TimeStep || @velocity[1] < 0.0 && @velocity[1] > -Environment::TimeStep
@@ -137,7 +135,6 @@ class KinematicBody
     edgeLoop() #runs the edgeloop that handles teleporting it around the edge
     @model.x = @position[0] #updating the viewmodels position so we can see him go
     @model.y = @position[1]
-    @model.size = @material.size
 
     #these are just all the labels and formatting the strings so they look pretty
     if @label != false
@@ -148,7 +145,7 @@ class KinematicBody
       @label[:velocity].text = "Velocity:" + ('%-8.8s' % @velocity[0].round(8).to_f).gsub(' ', '0') + "," + ('%-8.8s' % @velocity[1].round(8).to_f).gsub(' ', '0')
       @label[:acceleration].text = "Acceleration:" + ('%-8.8s' % @acceleration[0].round(8).to_f).gsub(' ', '0') + "," + ('%-8.8s' % @acceleration[1].round(8).to_f).gsub(' ', '0')
     end
-    
+
     @acceleration = Vector[0,0] #erase this frames acceleration so that we have a nice fresh start next frame.
   end
 end
