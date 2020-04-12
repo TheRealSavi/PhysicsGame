@@ -53,12 +53,14 @@ on :key do |event|
       when "w"
         p.applyForce(Vector[0, -Controller::Up]) #applies a small upward force
       when "space"
-        $items.push(Item.new(Window.width / 2,50, 'random', 'Jello'))
+        $items.push(Item.new(Window.width / 2, 50, 'random', 'Jello'))
       end
     when :down
       case event.key
       when "e"
         p.inventory.toggleShown()
+      when "q"
+        p.explode()
       end
     end
   end
